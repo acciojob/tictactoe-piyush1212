@@ -1,16 +1,108 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiplayer Tic Tac Toe</title>
+<style>
+  .container {
+    text-align: center;
+  }
+  .board {
+    display: inline-block;
+    margin-top: 20px;
+  }
+  .cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #000;
+    display: inline-block;
+    margin: 0;
+    line-height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .message {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+</style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
+
+<div class="container">
+  <h1>Tic Tac Toe</h1>
+  <form id="players-form">
+    <label for="player-1">Player 1 Name:</label>
+    <input type="text" id="player-1" required><br>
+    <label for="player-2">Player 2 Name:</label>
+    <input type="text" id="player-2" required><br>
+    <button type="submit" id="submit">Start Game</button>
+  </form>
+  <div class="board" style="display: none;">
+    <h2 class="message"></h2>
+    <div id="1" class="cell"></div>
+    <div id="2" class="cell"></div>
+    <div id="3" class="cell"></div><br>
+    <div id="4" class="cell"></div>
+    <div id="5" class="cell"></div>
+    <div id="6" class="cell"></div><br>
+    <div id="7" class="cell"></div>
+    <div id="8" class="cell"></div>
+    <div id="9" class="cell"></div>
+  </div>
+</div>
+
+<script>
+document.getElementById('players-form').addEventListener('submit', function(event) {
+  event.preventDefault();
+  var player1 = document.getElementById('player-1').value;
+  var player2 = document.getElementById('player-2').value;
+  if (player1 && player2) {
+    document.getElementById('players-form').style.display = 'none';
+    document.querySelector('.board').style.display = 'block';
+    document.querySelector('.message').textContent = player1 + ", you're up!";
+  } else {
+    alert("Please enter names for both players.");
+  }
+});
+
+var currentPlayer = 'X';
+var cells = document.querySelectorAll('.cell');
+
+cells.forEach(function(cell) {
+  cell.addEventListener('click', function() {
+    if (!cell.textContent) {
+      cell.textContent = currentPlayer;
+      checkWin();
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      var nextPlayer = currentPlayer === 'X' ? document.getElementById('player-1').value : document.getElementById('player-2').value;
+      document.querySelector('.message').textContent = nextPlayer + ", you're up!";
+    }
+  });
+});
+
+function checkWin() {
+  var lines = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7]
+  ];
+  for (var i = 0; i < lines.length; i++) {
+    var [a, b, c] = lines[i];
+    if (document.getElementById(a).textContent && document.getElementById(a).textContent === document.getElementById(b).textContent && document.getElementById(a).textContent === document.getElementById(c).textContent) {
+      var winner = document.getElementById(a).textContent === 'X' ? document.getElementById('player-1').value : document.getElementById('player-2').value;
+      document.querySelector('.message').textContent = winner + ", congratulations you won!";
+      return;
+    }
+  }
+}
 </script>
 
 </body>
-
 </html>
